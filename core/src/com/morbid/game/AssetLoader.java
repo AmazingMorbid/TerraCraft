@@ -13,9 +13,9 @@ public class AssetLoader {
     private static final String ASSETS_DIR = "/core/assets/";
     private static final String TEXTURES_DIR = "textures/";
 
-    private HashMap<String, Texture> textures = new HashMap<>();
+    static private HashMap<String, Texture> textures = new HashMap<>();
 
-    public void loadTextures() {
+    public static void loadTextures() {
         try {
             Files.walk(Paths.get(getDir(TEXTURES_DIR)))
                     .filter(Files::isRegularFile)
@@ -34,15 +34,21 @@ public class AssetLoader {
      * @param fileName - texture name with extension
      * @return texture
      */
-    public Texture getTexture(String fileName) {
+    public static Texture getTexture(String fileName) {
         return textures.get(fileName);
     }
 
-    public HashMap<String, Texture> getTextures() {
+    public static HashMap<String, Texture> getTextures() {
         return textures;
     }
 
-    private String getDir(final String DIR) {
+    public static void disposeTextures() {
+        for (Texture texture : textures.values()) {
+            texture.dispose();
+        }
+    }
+
+    private static String getDir(final String DIR) {
         return Gdx.files.getLocalStoragePath() + ASSETS_DIR + DIR;
     }
 }

@@ -1,5 +1,6 @@
 package com.morbid.game.entities;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -24,7 +25,6 @@ public abstract class GameObject {
 
     /**
      * Creates GameObject with specified values.
-     * @param ID
      * @param position
      * @param rotation
      * @param scale
@@ -37,6 +37,14 @@ public abstract class GameObject {
     }
 
     /**
+     * Retuns ID of a GameObject
+     * @return ID
+     */
+    public int getID() {
+        return ID;
+    }
+
+    /**
      * Here you place logic
      * @param deltaTime
      */
@@ -45,14 +53,7 @@ public abstract class GameObject {
     /**
      * Here you place render logic
      */
-    public abstract void render();
-
-    /**
-     * @return ID of a GameObject
-     */
-    public int getID() {
-        return ID;
-    }
+    public abstract void render(Batch batch);
 
     /**
      * @return position

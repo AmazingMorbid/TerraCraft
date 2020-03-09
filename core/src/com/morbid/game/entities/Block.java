@@ -1,7 +1,12 @@
 package com.morbid.game.entities;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.morbid.game.AssetLoader;
+import com.morbid.game.Settings;
 import com.morbid.game.types.BlockType;
+import com.morbid.game.types.Vector2Int;
 
 /**
  * Blocks are the basic units of structure in game that can be placed or destroyed.
@@ -10,11 +15,16 @@ import com.morbid.game.types.BlockType;
 public class Block extends GameObject {
     private BlockType blockType;
 
-    public Block() {
+    public Block(int ID, Vector2Int position, BlockType blockType) {
+        super(ID, Vector2Int.toVector2(position), Vector2.Zero, Vector2.Zero);
+
+        this.blockType = blockType;
     }
 
-    public Block(int ID, Vector2 position, Vector2 rotation, Vector2 scale) {
+    public Block(int ID, Vector2 position, Vector2 rotation, Vector2 scale, BlockType blockType) {
         super(ID, position, rotation, scale);
+
+        this.blockType = blockType;
     }
 
     @Override
@@ -23,7 +33,19 @@ public class Block extends GameObject {
     }
 
     @Override
-    public void render() {
+    public void render(Batch batch) {
+        Sprite sprite = new Sprite(AssetLoader.getTexture(blockType.toString()));
+        sprite.setPosition(getPosition().x * Settings.BLOCK_SCALE, getPosition().y * Settings.BLOCK_SCALE);
+        sprite.setSize(Settings.BLOCK_SCALE, Settings.BLOCK_SCALE);
 
+        sprite.draw(batch);
+    }
+
+    public BlockType getBlockType() {
+        return blockType;
+    }
+
+    public void setBlockType(BlockType blockType) {
+        this.blockType = blockType;
     }
 }
