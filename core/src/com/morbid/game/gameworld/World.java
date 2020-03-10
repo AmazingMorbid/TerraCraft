@@ -3,8 +3,10 @@ package com.morbid.game.gameworld;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.morbid.game.entities.Block;
+import com.morbid.game.entities.CameraComponent;
 import com.morbid.game.types.BlockType;
 import com.morbid.game.types.Vector2Int;
+import com.morbid.game.utils.DebugTools;
 
 public class World {
     private BlockType[][] worldBlocks;
@@ -15,25 +17,25 @@ public class World {
         this.chunks = chunks;
     }
 
-    public void renderChunks(Batch batch, int xChunksStart, int xChunksEnd, int yChunksStart, int yChunksEnd) {
-        for (int x = xChunksStart; x < xChunksEnd; x++) {
-            for (int y = yChunksStart; y < yChunksEnd; y++) {
-                chunks[x][y].renderBlocks(batch);
-            }
-        }
-    }
-
-    /**
-     * ATTENTION! THIS METHOD IS VERY DANGEROUS! IT WILL RENDER AN ENTIRE MAP NO MATTER HOW BIG IT IS!
-     * BE CAREFUL BECAUSE IT CAN RESULT IN MEMORY LEAK.
-     * Renders an entire map.
-     * @param batch
-     */
-    public void renderChunks(Batch batch) {
+    public void renderChunks(Batch batch, CameraComponent camera, int xChunksStart, int xChunksEnd, int yChunksStart, int yChunksEnd) {
         for (Chunk[] chunkRow : chunks) {
             for (Chunk chunk : chunkRow) {
-                chunk.renderBlocks(batch);
+                if (chunk.isNearPlayerVision(camera)) {
+                    chunk.renderBlocks(batch, camera);
+                }
             }
         }
+//        for (int x = xChunksStart; x <= xChunksEnd; x++) {
+//            for (int y = yChunksStart; y <= yChunksEnd; y++) {
+//                Chunk chunk = chunks[x][y];
+//
+//                // Render chunk only if it is visible to the player
+//                i
+//            }
+//        }
+    }
+
+    public Chunk[][] getChunks() {
+        return this.chunks;
     }
 }

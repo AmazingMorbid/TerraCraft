@@ -26,22 +26,22 @@ public class WorldGenerator {
             for (int y = 0; y < Settings.WORLD_SIZE.y; y++) {
                 worldBlocks[x][y] = BlockType.STONE;
                 // Create air above ground
-                if (y > 5) {
+                if (y > 10) {
                     worldBlocks[x][y] = BlockType.AIR;
                 }
 
                 // Create grass
-                if (y == 5) {
+                if (y == 10) {
                     worldBlocks[x][y] = BlockType.GRASS;
                 }
 
                 // Create dirt
-                if (y < 5 && y > 2) {
+                if (y < 10 && y > 7) {
                     worldBlocks[x][y] = BlockType.DIRT;
                 }
 
                 // Create stone
-                if (y <= 2) {
+                if (y <= 7) {
                     worldBlocks[x][y] = BlockType.STONE;
                 }
             }
@@ -91,6 +91,12 @@ public class WorldGenerator {
         // Add the chunk to array
         int chunkX = startX / Settings.CHUNK_SIZE.x;
         int chunkY = startY / Settings.CHUNK_SIZE.y;
-        worldChunks[chunkX][chunkY] = new Chunk(blockMap);
+        float worldX = startX * Settings.BLOCK_SCALE;
+        float worldY = startY * Settings.BLOCK_SCALE;
+
+        Chunk chunk = new Chunk(blockMap);
+        chunk.setWorldPosition(worldX, worldY);
+
+        worldChunks[chunkX][chunkY] = chunk;
     }
 }

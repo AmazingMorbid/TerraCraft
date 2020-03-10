@@ -2,11 +2,15 @@ package com.morbid.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.morbid.game.AssetLoader;
 import com.morbid.game.Settings;
 import com.morbid.game.types.BlockType;
 import com.morbid.game.types.Vector2Int;
+import com.morbid.game.utils.DebugTools;
+
+import java.util.Set;
 
 /**
  * Blocks are the basic units of structure in game that can be placed or destroyed.

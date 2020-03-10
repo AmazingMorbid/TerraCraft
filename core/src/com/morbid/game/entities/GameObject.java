@@ -37,6 +37,18 @@ public abstract class GameObject {
     }
 
     /**
+     * Move GameObject by x and y
+     * @param x
+     * @param y
+     * @return translated position vector
+     */
+    public Vector2 translate(float x, float y) {
+        position.add(x, y);
+
+        return position;
+    }
+
+    /**
      * Retuns ID of a GameObject
      * @return ID
      */
