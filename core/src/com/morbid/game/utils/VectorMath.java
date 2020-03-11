@@ -28,12 +28,25 @@ public class VectorMath {
         float cameraWidthHalf = camera.viewportWidth / 2;
         float cameraHeightHalf = camera.viewportHeight / 2;
 
-        // Calculate index values and make sure they are always >= 0
-        int startX = Math.max((int) ((playerPosition.x - cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) - 1, 0);
-        int endX = Math.max((int) ((playerPosition.x + cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) + 1, 0);
+        // Calculate index values
+        int startX = (int) ((playerPosition.x - cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) - 1;
+        int endX = (int) ((playerPosition.x + cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) + 1;
 
-        int startY = Math.max((int) ((playerPosition.y - cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) - 1, 0);
-        int endY = Math.max((int) ((playerPosition.y + cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) + 1, 0);
+        int startY = (int) ((playerPosition.y - cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) - 1;
+        int endY = (int) ((playerPosition.y + cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) + 1;
+
+        int worldChunksX = Settings.WORLD_SIZE.x / Settings.CHUNK_SIZE.x - 1;
+        int worldChunksY = Settings.WORLD_SIZE.y / Settings.CHUNK_SIZE.y - 1;
+
+        // Clamp chunks to prevent an index out of bounds
+        startX = Math.max(startX, 0);
+        startX = Math.min(startX, worldChunksX);
+        endX = Math.max(endX, 0);
+        endX = Math.min(endX, worldChunksX);
+        startY = Math.max(startY, 0);
+        startY = Math.min(startY, worldChunksY);
+        endY = Math.max(endY, 0);
+        endY = Math.min(endY, worldChunksY);
 
         System.out.println("StartX: " + startX);
         System.out.println("EndX: " + endX);
