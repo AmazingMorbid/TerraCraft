@@ -31,7 +31,6 @@ import java.util.Vector;
 public class MainGame extends ApplicationAdapter {
 	// Camera
 	CameraComponent camera;
-	Vector2 viewportMargin = new Vector2(300, 200);
 
 	// Player
 	Player player;
@@ -48,7 +47,7 @@ public class MainGame extends ApplicationAdapter {
 		AssetLoader.loadTextures();
 
 		// Player
-		player = new Player(-50, 0);
+		player = new Player(200, 60);
 
 		// Camera
 		float w = Gdx.graphics.getWidth();

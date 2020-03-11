@@ -1,5 +1,6 @@
 package com.morbid.game.gameworld;
 
+import com.badlogic.gdx.math.Vector2;
 import com.morbid.game.Settings;
 import com.morbid.game.entities.Block;
 import com.morbid.game.types.BlockType;
@@ -94,8 +95,7 @@ public class WorldGenerator {
         float worldX = startX * Settings.BLOCK_SIZE;
         float worldY = startY * Settings.BLOCK_SIZE;
 
-        Chunk chunk = new Chunk(blockMap);
-        chunk.setWorldPosition(worldX, worldY);
+        Chunk chunk = new Chunk(blockMap, new Vector2(worldX, worldY));
 
         worldChunks[chunkX][chunkY] = chunk;
     }

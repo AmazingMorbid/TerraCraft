@@ -17,17 +17,6 @@ public class World {
         this.chunks = chunks;
     }
 
-    public void renderChunks(Batch batch, CameraComponent camera) {
-        for (Chunk[] chunkRow : chunks) {
-            for (Chunk chunk : chunkRow) {
-                if (chunk.isNearPlayerVision(camera)) {
-                    chunk.renderBlocks(batch, camera);
-                }
-            }
-        }
-//
-    }
-
     public void renderChunks(Batch batch, CameraComponent camera, int xChunksStart, int xChunksEnd, int yChunksStart, int yChunksEnd) {
         for (int x = xChunksStart; x <= xChunksEnd; x++) {
             for (int y = yChunksStart; y <= yChunksEnd; y++) {

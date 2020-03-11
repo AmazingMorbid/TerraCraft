@@ -16,14 +16,13 @@ public class Chunk {
     private Vector2 worldPosition;
     private Color debugColor = Color.PINK;
 
-    public Chunk(Map<Integer, Block> blockMap) {
+    public Chunk(Map<Integer, Block> blockMap, Vector2 worldPosition) {
         this.blockMap = blockMap;
+        this.worldPosition = worldPosition;
     }
 
     /**
      * Renders chunk
-     * TODO: Render only when chunk is visible
-     *
      * @param batch sprite batch
      */
     public void renderBlocks(Batch batch, CameraComponent camera) {
@@ -44,46 +43,7 @@ public class Chunk {
         );
     }
 
-    /**
-     * Check if chunk is inside camera's viewport
-     * @param camera
-     * @return true if chunk is visible trough camera
-     */
-    public boolean isNearPlayerVision(CameraComponent camera) {
-        // Chunk border coordinates
-        Vector2 bottomLeft = this.worldPosition;
-        Vector2 bottomRight = new Vector2(bottomLeft.x + (Settings.CHUNK_SIZE.x * Settings.BLOCK_SIZE), bottomLeft.y);
-        Vector2 topLeft = new Vector2(bottomLeft.x, bottomLeft.y + (Settings.CHUNK_SIZE.y * Settings.BLOCK_SIZE));
-        Vector2 topRight = new Vector2(bottomRight.x, topLeft.y);
-
-        // Viewport border coordinates
-        Vector2 viewportMargin = new Vector2(300, 200);
-
-        Vector2 viewportBottomLeft = new Vector2(
-                camera.position.x - (camera.viewportWidth / 2) + viewportMargin.x,
-                camera.position.y - (camera.viewportHeight / 2) + viewportMargin.y
-        );
-        Vector2 viewportTopRight = new Vector2(
-                camera.position.x + (camera.viewportWidth / 2) - viewportMargin.x,
-                camera.position.y + (camera.viewportHeight / 2) - viewportMargin.y
-        );
-
-        Vector2[] chunkBorderPoints = new Vector2[]{
-                bottomLeft, bottomRight, topLeft, topRight
-        };
-
-        return VectorMath.isAnyPointInsideRectangle(chunkBorderPoints, viewportBottomLeft, viewportTopRight);
-    }
-
     public Vector2 getWorldPosition() {
         return worldPosition;
-    }
-
-    public void setWorldPosition(Vector2 worldPosition) {
-        this.worldPosition = worldPosition;
-    }
-
-    public void setWorldPosition(float x, float y) {
-        this.worldPosition = new Vector2(x, y);
     }
 }

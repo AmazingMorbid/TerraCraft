@@ -6,7 +6,7 @@ import com.morbid.game.types.Vector2Int;
 public class Settings {
     /* World Settings */
     public static final Vector2Int WORLD_SIZE = new Vector2Int(512, 512);
-    public static final Vector2Int CHUNK_SIZE = new Vector2Int(4, 4);
+    public static final Vector2Int CHUNK_SIZE = new Vector2Int(16, 16);
     public static final Vector2 BLOCK_SCALE = new Vector2(1f, 1f);
 
     /* Render Settings */
