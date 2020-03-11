@@ -17,7 +17,7 @@ public class World {
         this.chunks = chunks;
     }
 
-    public void renderChunks(Batch batch, CameraComponent camera, int xChunksStart, int xChunksEnd, int yChunksStart, int yChunksEnd) {
+    public void renderChunks(Batch batch, CameraComponent camera) {
         for (Chunk[] chunkRow : chunks) {
             for (Chunk chunk : chunkRow) {
                 if (chunk.isNearPlayerVision(camera)) {
@@ -25,14 +25,17 @@ public class World {
                 }
             }
         }
-//        for (int x = xChunksStart; x <= xChunksEnd; x++) {
-//            for (int y = yChunksStart; y <= yChunksEnd; y++) {
-//                Chunk chunk = chunks[x][y];
 //
-//                // Render chunk only if it is visible to the player
-//                i
-//            }
-//        }
+    }
+
+    public void renderChunks(Batch batch, CameraComponent camera, int xChunksStart, int xChunksEnd, int yChunksStart, int yChunksEnd) {
+        for (int x = xChunksStart; x <= xChunksEnd; x++) {
+            for (int y = yChunksStart; y <= yChunksEnd; y++) {
+                Chunk chunk = chunks[x][y];
+
+                chunk.renderBlocks(batch, camera);
+            }
+        }
     }
 
     public Chunk[][] getChunks() {

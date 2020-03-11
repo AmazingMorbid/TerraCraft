@@ -68,6 +68,7 @@ public abstract class GameObject {
     public abstract void render(Batch batch);
 
     /**
+     * Get world position of GameObject
      * @return position
      */
     public Vector2 getPosition() {

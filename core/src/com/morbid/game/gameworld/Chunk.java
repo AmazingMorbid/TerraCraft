@@ -10,8 +10,6 @@ import com.morbid.game.utils.DebugTools;
 import com.morbid.game.utils.VectorMath;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
 
 public class Chunk {
     private Map<Integer, Block> blockMap;
@@ -38,8 +36,8 @@ public class Chunk {
         DebugTools.rect(
                 worldPosition.x,
                 worldPosition.y,
-                Settings.CHUNK_SIZE.x * Settings.BLOCK_SCALE,
-                Settings.CHUNK_SIZE.y * Settings.BLOCK_SCALE,
+                Settings.CHUNK_SIZE.x * Settings.BLOCK_SIZE,
+                Settings.CHUNK_SIZE.y * Settings.BLOCK_SIZE,
                 1,
                 debugColor,
                 camera.combined
@@ -54,8 +52,8 @@ public class Chunk {
     public boolean isNearPlayerVision(CameraComponent camera) {
         // Chunk border coordinates
         Vector2 bottomLeft = this.worldPosition;
-        Vector2 bottomRight = new Vector2(bottomLeft.x + (Settings.CHUNK_SIZE.x * Settings.BLOCK_SCALE), bottomLeft.y);
-        Vector2 topLeft = new Vector2(bottomLeft.x, bottomLeft.y + (Settings.CHUNK_SIZE.y * Settings.BLOCK_SCALE));
+        Vector2 bottomRight = new Vector2(bottomLeft.x + (Settings.CHUNK_SIZE.x * Settings.BLOCK_SIZE), bottomLeft.y);
+        Vector2 topLeft = new Vector2(bottomLeft.x, bottomLeft.y + (Settings.CHUNK_SIZE.y * Settings.BLOCK_SIZE));
         Vector2 topRight = new Vector2(bottomRight.x, topLeft.y);
 
         // Viewport border coordinates

@@ -91,8 +91,8 @@ public class WorldGenerator {
         // Add the chunk to array
         int chunkX = startX / Settings.CHUNK_SIZE.x;
         int chunkY = startY / Settings.CHUNK_SIZE.y;
-        float worldX = startX * Settings.BLOCK_SCALE;
-        float worldY = startY * Settings.BLOCK_SCALE;
+        float worldX = startX * Settings.BLOCK_SIZE;
+        float worldY = startY * Settings.BLOCK_SIZE;
 
         Chunk chunk = new Chunk(blockMap);
         chunk.setWorldPosition(worldX, worldY);

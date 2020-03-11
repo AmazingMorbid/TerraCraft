@@ -2,15 +2,11 @@ package com.morbid.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.morbid.game.AssetLoader;
 import com.morbid.game.Settings;
 import com.morbid.game.types.BlockType;
 import com.morbid.game.types.Vector2Int;
-import com.morbid.game.utils.DebugTools;
-
-import java.util.Set;
 
 /**
  * Blocks are the basic units of structure in game that can be placed or destroyed.
@@ -39,8 +35,8 @@ public class Block extends GameObject {
     @Override
     public void render(Batch batch) {
         Sprite sprite = new Sprite(AssetLoader.getTexture(blockType.toString()));
-        sprite.setPosition(getPosition().x * Settings.BLOCK_SCALE, getPosition().y * Settings.BLOCK_SCALE);
-        sprite.setSize(Settings.BLOCK_SCALE, Settings.BLOCK_SCALE);
+        sprite.setPosition(getPosition().x * Settings.BLOCK_SIZE, getPosition().y * Settings.BLOCK_SIZE);
+        sprite.setSize(Settings.BLOCK_SIZE, Settings.BLOCK_SIZE);
 
         sprite.draw(batch);
     }

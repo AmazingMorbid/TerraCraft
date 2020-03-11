@@ -20,10 +20,12 @@ import com.morbid.game.gameworld.WorldGenerator;
 import com.morbid.game.types.BlockType;
 import com.morbid.game.types.Vector2Int;
 import com.morbid.game.utils.DebugTools;
+import com.morbid.game.utils.VectorMath;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 
 public class MainGame extends ApplicationAdapter {
@@ -74,7 +76,16 @@ public class MainGame extends ApplicationAdapter {
 		batch.begin();
 
 		// World
-		world.renderChunks(batch, camera,0, 1, 0, 2);
+		// Get chunks near player
+		VectorMath.NearChunksResult visibleChunksIndexes = VectorMath.getChunksNearPlayer(camera, player.getPosition());
+		world.renderChunks(
+				batch,
+				camera,
+				visibleChunksIndexes.startX,
+				visibleChunksIndexes.endX,
+				visibleChunksIndexes.startY,
+				visibleChunksIndexes.endY
+		);
 
 		batch.end();
 	}
