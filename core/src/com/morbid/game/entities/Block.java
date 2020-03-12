@@ -18,28 +18,16 @@ import com.morbid.game.types.Vector2Int;
  * Blocks are the basic units of structure in game that can be placed or destroyed.
  * Block is everything you see. Your entire life is built upon them.
  */
-public class Block extends GameObject {
-    private Body body;
-    private World world;
+public class Block extends Rigidbody {
     private BlockType blockType;
     private Sprite sprite;
 
     public Block(World world, Vector2 worldPosition, BlockType blockType) {
-        super(worldPosition);
+        super(world, worldPosition);
 
-        this.world = world;
         this.blockType = blockType;
 
-        sprite = new Sprite(AssetLoader.getTexture(blockType.toString()));
-        sprite.setPosition(
-                position.x * Settings.BLOCK_SIZE,
-                position.y * Settings.BLOCK_SIZE
-        );
-        sprite.setSize(
-                Settings.BLOCK_SIZE,
-                Settings.BLOCK_SIZE
-        );
-
+        createSprite();
         createBody();
     }
 
@@ -53,7 +41,8 @@ public class Block extends GameObject {
         sprite.draw(batch);
     }
 
-    private void createBody() {
+    @Override
+    public void createBody() {
         BodyDef blockBodyDef = new BodyDef();
         blockBodyDef.type = BodyDef.BodyType.StaticBody;
         blockBodyDef.position.set(
@@ -74,6 +63,21 @@ public class Block extends GameObject {
         blockBox.dispose();
     }
 
+    /**
+     * Creates sprite
+     */
+    private void createSprite() {
+        sprite = new Sprite(AssetLoader.getTexture(blockType.toString()));
+        sprite.setPosition(
+                position.x * Settings.BLOCK_SIZE,
+                position.y * Settings.BLOCK_SIZE
+        );
+        sprite.setSize(
+                Settings.BLOCK_SIZE,
+                Settings.BLOCK_SIZE
+        );
+    }
+
     public BlockType getBlockType() {
         return blockType;
     }
@@ -81,4 +85,5 @@ public class Block extends GameObject {
     public void setBlockType(BlockType blockType) {
         this.blockType = blockType;
     }
+
 }

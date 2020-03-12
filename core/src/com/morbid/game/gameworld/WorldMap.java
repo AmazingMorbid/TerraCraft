@@ -1,6 +1,7 @@
 package com.morbid.game.gameworld;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.physics.box2d.World;
 import com.morbid.game.types.BlockType;
 import com.morbid.game.types.WorldType;
 
@@ -12,6 +13,7 @@ public class WorldMap {
     public WorldMap(WorldType worldType, BlockType[][] worldBlocks, Chunk[][] chunks) {
         this.worldBlocks = worldBlocks;
         this.chunks = chunks;
+        this.worldType = worldType;
     }
 
     /**

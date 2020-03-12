@@ -1,6 +1,9 @@
 package com.morbid.game;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.morbid.game.types.Vector2Int;
 
 public class Settings {
@@ -31,7 +34,10 @@ public class Settings {
     /* ---------- BOX2D ---------- */
     public static final int PPM = 64;
 
-    public static final float WORLD_TO_BOX = 1f / 64f;
-
-    public static final float BOX_TO_WORLD = 1f / WORLD_TO_BOX;
+    public static Vector2 box2dToSpritePos(Body body, Sprite sprite) {
+        return new Vector2(
+                body.getPosition().x * Settings.PPM - sprite.getWidth() / 2,
+                body.getPosition().y * Settings.PPM - sprite.getHeight() / 2
+        );
+    }
 }

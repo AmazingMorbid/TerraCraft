@@ -22,7 +22,6 @@ public abstract class GameObject {
      */
     public GameObject(Vector2 position) {
         this.position = position;
-        System.out.println("PositionX: " + this.position.x);
     }
 
     /**

@@ -51,16 +51,13 @@ public class MainGame extends ApplicationAdapter {
 		world = new World(new Vector2(0, -10), true);
 
 		// Player
-		player = new Player(new Vector2(1000, 1000));
+		player = new Player(world, new Vector2(0, 15));
 
 		// Camera
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
-
 		camera = new CameraComponent();
 		viewport = new ExtendViewport(Settings.MIN_VIEWPORT_WIDTH, Settings.MIN_VIEWPORT_HEIGHT, camera);
 
-		camera.setAnchor(player);
+		camera.attachPlayer(player);
 		camera.update();
 		viewport.apply();
 
@@ -83,13 +80,17 @@ public class MainGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
 		batch.begin();
+
+		// Player
+		player.render(batch);
 
 		// World
 		renderMap();
 
 		// Debug render
-		debugRenderer.render(world, cameraBox2D);
+//		debugRenderer.render(world, cameraBox2D);
 
 		batch.end();
 
@@ -120,16 +121,17 @@ public class MainGame extends ApplicationAdapter {
 
 	private void handleInput() {
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			player.position.add(-3, 0);
+			player.translate(new Vector2(-10, 0));
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			player.position.add(3, 0);
+			player.translate(new Vector2(10, 0));
+
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			player.position.add(0, 3);
+			player.position.add(0, 10);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			player.position.add(0, -3);
+			player.position.add(0, -10);
 		}
 	}
 
@@ -139,7 +141,7 @@ public class MainGame extends ApplicationAdapter {
 	 */
 	private void renderMap() {
 		// Get chunks near player
-		VectorMath.NearChunksResult visibleChunksIndexes = VectorMath.getChunksNearPlayer(camera, player.position);
+		VectorMath.NearChunksResult visibleChunksIndexes = VectorMath.getChunksNearPlayer(camera, player.body.getPosition());
 
 		// Render chunks
 		worldMap.renderChunks(

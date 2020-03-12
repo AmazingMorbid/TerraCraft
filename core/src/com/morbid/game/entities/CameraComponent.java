@@ -6,6 +6,7 @@ import com.morbid.game.Settings;
 
 public class CameraComponent extends OrthographicCamera {
     private GameObject anchor;
+    private Player attachedPlayer;
 
     public CameraComponent() {
         super(
@@ -24,18 +25,13 @@ public class CameraComponent extends OrthographicCamera {
     public void update() {
         super.update();
 
-        if (anchor != null) {
-            position.set(anchor.position.x, anchor.position.y, 0);
+        if (attachedPlayer != null) {
+            position.set(
+                    attachedPlayer.body.getPosition().x * Settings.PPM,
+                    attachedPlayer.body.getPosition().y * Settings.PPM,
+                    0
+            );
         }
-    }
-
-    /**
-     * Return GameObject to which camera is attached to
-     * @return anchored GameObject
-     */
-    @SuppressWarnings("GrazieInspection")
-    public GameObject getAnchor() {
-        return anchor;
     }
 
     /**
@@ -44,5 +40,13 @@ public class CameraComponent extends OrthographicCamera {
      */
     public void setAnchor(GameObject anchor) {
         this.anchor = anchor;
+    }
+
+    /**
+     * Attach the camera to a player
+     * @param player
+     */
+    public void attachPlayer(Player player) {
+        this.attachedPlayer = player;
     }
 }

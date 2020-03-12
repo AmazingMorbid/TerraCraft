@@ -29,11 +29,11 @@ public class VectorMath {
         float cameraHeightHalf = camera.viewportHeight / 2;
 
         // Calculate index values
-        int startX = (int) ((playerPosition.x - cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) - 1;
-        int endX = (int) ((playerPosition.x + cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) + 1;
+        int startX = (int) ((playerPosition.x * Settings.PPM - cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) - 1;
+        int endX = (int) ((playerPosition.x * Settings.PPM + cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) + 1;
 
-        int startY = (int) ((playerPosition.y - cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) - 1;
-        int endY = (int) ((playerPosition.y + cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) + 1;
+        int startY = (int) ((playerPosition.y * Settings.PPM - cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) - 1;
+        int endY = (int) ((playerPosition.y * Settings.PPM + cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) + 1;
 
         int worldChunksX = Settings.WORLD_SIZE.x / Settings.CHUNK_SIZE.x - 1;
         int worldChunksY = Settings.WORLD_SIZE.y / Settings.CHUNK_SIZE.y - 1;
@@ -47,9 +47,6 @@ public class VectorMath {
         startY = Math.min(startY, worldChunksY);
         endY = Math.max(endY, 0);
         endY = Math.min(endY, worldChunksY);
-
-        System.out.println("StartX: " + startX);
-        System.out.println("EndX: " + endX);
 
         return new NearChunksResult(
                 startX,
