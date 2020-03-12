@@ -1,8 +1,14 @@
 package com.morbid.game.entities;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.morbid.game.AssetLoader;
 import com.morbid.game.Settings;
 import com.morbid.game.types.BlockType;
@@ -13,18 +19,28 @@ import com.morbid.game.types.Vector2Int;
  * Block is everything you see. Your entire life is built upon them.
  */
 public class Block extends GameObject {
+    private Body body;
+    private World world;
     private BlockType blockType;
+    private Sprite sprite;
 
-    public Block(int ID, Vector2Int position, BlockType blockType) {
-        super(ID, Vector2Int.toVector2(position), Vector2.Zero, Vector2.Zero);
+    public Block(World world, Vector2 worldPosition, BlockType blockType) {
+        super(worldPosition);
 
+        this.world = world;
         this.blockType = blockType;
-    }
 
-    public Block(int ID, Vector2 position, Vector2 rotation, Vector2 scale, BlockType blockType) {
-        super(ID, position, rotation, scale);
+        sprite = new Sprite(AssetLoader.getTexture(blockType.toString()));
+        sprite.setPosition(
+                position.x * Settings.BLOCK_SIZE,
+                position.y * Settings.BLOCK_SIZE
+        );
+        sprite.setSize(
+                Settings.BLOCK_SIZE,
+                Settings.BLOCK_SIZE
+        );
 
-        this.blockType = blockType;
+        createBody();
     }
 
     @Override
@@ -34,11 +50,28 @@ public class Block extends GameObject {
 
     @Override
     public void render(Batch batch) {
-        Sprite sprite = new Sprite(AssetLoader.getTexture(blockType.toString()));
-        sprite.setPosition(getPosition().x * Settings.BLOCK_SIZE, getPosition().y * Settings.BLOCK_SIZE);
-        sprite.setSize(Settings.BLOCK_SIZE, Settings.BLOCK_SIZE);
-
         sprite.draw(batch);
+    }
+
+    private void createBody() {
+        BodyDef blockBodyDef = new BodyDef();
+        blockBodyDef.type = BodyDef.BodyType.StaticBody;
+        blockBodyDef.position.set(
+                position.x + sprite.getWidth() / 2 / Settings.PPM,
+                position.y + sprite.getHeight() / 2 / Settings.PPM
+        );
+
+        body = world.createBody(blockBodyDef);
+
+        PolygonShape blockBox = new PolygonShape();
+        blockBox.setAsBox(
+                sprite.getWidth() / 2 / Settings.PPM,
+                sprite.getHeight() / 2 / Settings.PPM
+        );
+
+        body.createFixture(blockBox, 0.0f);
+
+        blockBox.dispose();
     }
 
     public BlockType getBlockType() {

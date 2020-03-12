@@ -12,11 +12,11 @@ import com.morbid.game.utils.VectorMath;
 import java.util.Map;
 
 public class Chunk {
-    private Map<Integer, Block> blockMap;
+    private Map<Vector2, Block> blockMap;
     private Vector2 worldPosition;
     private Color debugColor = Color.PINK;
 
-    public Chunk(Map<Integer, Block> blockMap, Vector2 worldPosition) {
+    public Chunk(Map<Vector2, Block> blockMap, Vector2 worldPosition) {
         this.blockMap = blockMap;
         this.worldPosition = worldPosition;
     }
@@ -25,7 +25,7 @@ public class Chunk {
      * Renders chunk
      * @param batch sprite batch
      */
-    public void renderBlocks(Batch batch, CameraComponent camera) {
+    public void renderBlocks(Batch batch) {
         for (Block block : blockMap.values()) {
             block.render(batch);
         }

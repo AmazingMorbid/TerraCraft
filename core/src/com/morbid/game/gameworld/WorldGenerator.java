@@ -1,28 +1,40 @@
 package com.morbid.game.gameworld;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.morbid.game.Settings;
 import com.morbid.game.entities.Block;
 import com.morbid.game.types.BlockType;
-import com.morbid.game.types.Vector2Int;
+import com.morbid.game.types.WorldType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class WorldGenerator {
+    private WorldType worldType;
+    private World world;
     private BlockType[][] worldBlocks;
     private Chunk[][] worldChunks;
 
-    public World generateWorld() {
+    public WorldMap generateWorld(World world, WorldType worldType) {
+        this.world = world;
+        this.worldType = worldType;
+
         generateWorldBlocks();
         generateChunks();
 
-        return new World(worldBlocks, worldChunks);
+        return new WorldMap(worldType, worldBlocks, worldChunks);
     }
 
     private void generateWorldBlocks() {
         worldBlocks = new BlockType[Settings.WORLD_SIZE.x][Settings.WORLD_SIZE.y];
 
+        if (worldType == WorldType.FLAT) {
+            generateFlatWorldBlocks();
+        }
+    }
+
+    private void generateFlatWorldBlocks() {
         for (int x = 0; x < Settings.WORLD_SIZE.x; x++) {
             for (int y = 0; y < Settings.WORLD_SIZE.y; y++) {
                 worldBlocks[x][y] = BlockType.STONE;
@@ -71,7 +83,7 @@ public class WorldGenerator {
      * @param startY starting y coordinate of a chunk
      */
     private void createChunk(int startX, int startY) {
-        Map<Integer, Block> blockMap = new HashMap<>();
+        Map<Vector2, Block> blockMap = new HashMap<>();
 
         // Create blocks inside a chunk based on block types
 
@@ -79,12 +91,10 @@ public class WorldGenerator {
             for (int y = startY; y < (startY + Settings.CHUNK_SIZE.y); y++) {
                 // Check if block is AIR - AIR is basically empty space, no need for a block here
                 if (worldBlocks[x][y] != BlockType.AIR) {
-                    // Create ID using the bitwise left shift (basically a big number from coordinates)
-                    int ID = x + (y << 10);
-                    Vector2Int position = new Vector2Int(x, y);
+                    Vector2 position = new Vector2(x, y);
 
-                    Block block = new Block(ID, position, worldBlocks[x][y]);
-                    blockMap.put(ID, block);
+                    Block block = new Block(world, position, worldBlocks[x][y]);
+                    blockMap.put(position, block);
                 }
             }
         }

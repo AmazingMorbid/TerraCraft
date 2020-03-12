@@ -1,11 +1,19 @@
 package com.morbid.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.morbid.game.Settings;
 
 public class CameraComponent extends OrthographicCamera {
     private GameObject anchor;
 
     public CameraComponent() {
+        super(
+                Gdx.graphics.getWidth(),
+                Gdx.graphics.getWidth()
+//            Settings.CAMERA_VIEWPORT_WIDTH,
+//            Settings.CAMERA_VIEWPORT_HEIGHT
+        );
     }
 
     public CameraComponent(float viewportWidth, float viewportHeight) {
@@ -17,7 +25,7 @@ public class CameraComponent extends OrthographicCamera {
         super.update();
 
         if (anchor != null) {
-            position.set(anchor.getPosition().x, anchor.getPosition().y, 0);
+            position.set(anchor.position.x, anchor.position.y, 0);
         }
     }
 
