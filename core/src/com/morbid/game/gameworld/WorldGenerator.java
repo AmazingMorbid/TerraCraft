@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.morbid.game.Settings;
 import com.morbid.game.entities.Block;
 import com.morbid.game.types.BlockType;
+import com.morbid.game.types.Vector2Int;
 import com.morbid.game.types.WorldType;
 
 import java.util.HashMap;
@@ -83,7 +84,7 @@ public class WorldGenerator {
      * @param startY starting y coordinate of a chunk
      */
     private void createChunk(int startX, int startY) {
-        Map<Vector2, Block> blockMap = new HashMap<>();
+        Map<Vector2Int, Block> blockMap = new HashMap<>();
 
         // Create blocks inside a chunk based on block types
 
@@ -91,9 +92,9 @@ public class WorldGenerator {
             for (int y = startY; y < (startY + Settings.CHUNK_SIZE.y); y++) {
                 // Check if block is AIR - AIR is basically empty space, no need for a block here
                 if (worldBlocks[x][y] != BlockType.AIR) {
-                    Vector2 position = new Vector2(x, y);
+                    Vector2Int position = new Vector2Int(x, y);
 
-                    Block block = new Block(world, position, worldBlocks[x][y]);
+                    Block block = new Block(world, position.toVector2(), worldBlocks[x][y]);
                     blockMap.put(position, block);
                 }
             }

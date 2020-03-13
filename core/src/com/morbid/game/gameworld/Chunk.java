@@ -7,16 +7,17 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.morbid.game.Settings;
 import com.morbid.game.entities.Block;
 import com.morbid.game.entities.CameraComponent;
+import com.morbid.game.types.Vector2Int;
 import com.morbid.game.utils.DebugTools;
 import com.morbid.game.utils.VectorMath;
 
 import java.util.Map;
 
 public class Chunk {
-    private Map<Vector2, Block> blockMap;
+    private Map<Vector2Int, Block> blockMap;
     private Vector2 worldPosition;
 
-    public Chunk(Map<Vector2, Block> blockMap, Vector2 worldPosition) {
+    public Chunk(Map<Vector2Int, Block> blockMap, Vector2 worldPosition) {
         this.blockMap = blockMap;
         this.worldPosition = worldPosition;
     }
@@ -31,7 +32,15 @@ public class Chunk {
         }
     }
 
+    public void destroyBlock(Vector2Int cellPosition) {
+        blockMap.remove(cellPosition);
+    }
+
     public Vector2 getWorldPosition() {
         return worldPosition;
+    }
+
+    public Map<Vector2Int, Block> getBlockMap() {
+        return blockMap;
     }
 }

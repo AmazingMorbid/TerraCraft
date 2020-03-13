@@ -18,6 +18,8 @@ public class Settings {
      */
     public static final Vector2Int CHUNK_SIZE = new Vector2Int(16, 16);
 
+    public static final Vector2 CHUNKS_IN_WORLD = new Vector2(WORLD_SIZE.x / CHUNK_SIZE.x, WORLD_SIZE.y / CHUNK_SIZE.y);
+
     public static final Vector2 BLOCK_SCALE = new Vector2(1f, 1f);
 
     /* ---------- Render Settings ---------- */

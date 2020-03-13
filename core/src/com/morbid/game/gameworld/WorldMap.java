@@ -3,6 +3,7 @@ package com.morbid.game.gameworld;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.morbid.game.types.BlockType;
+import com.morbid.game.types.Vector2Int;
 import com.morbid.game.types.WorldType;
 
 public class WorldMap {
@@ -32,6 +33,10 @@ public class WorldMap {
                 chunk.renderBlocks(batch);
             }
         }
+    }
+
+    public void destroyBlock(Vector2Int blockCellPosition) {
+        this.worldBlocks[blockCellPosition.x][blockCellPosition.y] = BlockType.AIR;
     }
 
     public Chunk[][] getChunks() {
