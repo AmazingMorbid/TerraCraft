@@ -70,11 +70,11 @@ public class MainGame extends ApplicationAdapter {
 		debugRenderer = new Box2DDebugRenderer();
 
 		// Player
-		player = new Player(world, new Vector2(0, 15));
+		player = new Player(world, new Vector2(0, 70));
 		camera.attachPlayer(player);
 
 		// World map
-		worldMap = worldGenerator.generateWorld(world, WorldType.FLAT);
+		worldMap = worldGenerator.generateWorld(world, WorldType.SINUS);
 
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
@@ -145,36 +145,7 @@ public class MainGame extends ApplicationAdapter {
 		renderMap();
 
 		// Debug render
-		debugRenderer.render(world, cameraBox2D);
-
-//		DebugTools.line(
-//				new Vector2(
-//						camera.position.x - viewport.getWorldWidth() / 2,
-//						camera.position.y - viewport.getWorldHeight() / 2
-//				),
-//				new Vector2(
-//						camera.position.x + viewport.getWorldWidth() / 2,
-//						camera.position.y + viewport.getWorldHeight() / 2
-//				),
-//				2,
-//				Color.PINK,
-//				camera.combined
-//		);
-//
-//		DebugTools.line(
-//				new Vector2(
-//						camera.position.x - viewport.getWorldWidth() / 2,
-//						camera.position.y + viewport.getWorldHeight() / 2
-//				),
-//				new Vector2(
-//						camera.position.x + viewport.getWorldWidth() / 2,
-//						camera.position.y - viewport.getWorldHeight() / 2
-//				),
-//				2,
-//				Color.PINK,
-//				camera.combined
-//		);
-
+//		debugRenderer.render(world, cameraBox2D);
 
 		batch.end();
 

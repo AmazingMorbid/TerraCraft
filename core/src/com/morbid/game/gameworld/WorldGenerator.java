@@ -30,15 +30,20 @@ public class WorldGenerator {
     private void generateWorldBlocks() {
         worldBlocks = new BlockType[Settings.WORLD_SIZE.x][Settings.WORLD_SIZE.y];
 
-        if (worldType == WorldType.FLAT) {
-            generateFlatWorldBlocks();
+        switch (worldType) {
+            case FLAT:
+                generateFlatWorldBlocks();
+                break;
+
+            case SINUS:
+                generateSinusWorldBlocks();
+                break;
         }
     }
 
     private void generateFlatWorldBlocks() {
         for (int x = 0; x < Settings.WORLD_SIZE.x; x++) {
             for (int y = 0; y < Settings.WORLD_SIZE.y; y++) {
-                worldBlocks[x][y] = BlockType.STONE;
                 // Create air above ground
                 if (y > 10) {
                     worldBlocks[x][y] = BlockType.AIR;
@@ -57,6 +62,23 @@ public class WorldGenerator {
                 // Create stone
                 if (y <= 7) {
                     worldBlocks[x][y] = BlockType.STONE;
+                }
+            }
+        }
+    }
+
+    private void generateSinusWorldBlocks() {
+        for (int x = 0; x < Settings.WORLD_SIZE.x; x++) {
+            double cos = Math.sin(x * 0.5f) * 2f + 50f;
+
+            System.out.println(cos);
+
+            for (int y = 0; y < Settings.WORLD_SIZE.y; y++) {
+                if (y <= cos) {
+                    worldBlocks[x][y] = BlockType.STONE;
+
+                } else {
+                    worldBlocks[x][y] = BlockType.AIR;
                 }
             }
         }
