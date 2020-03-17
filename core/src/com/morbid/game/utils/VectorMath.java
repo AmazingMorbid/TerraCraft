@@ -8,6 +8,8 @@ import com.morbid.game.entities.CameraComponent;
 import com.morbid.game.gameworld.Chunk;
 import com.morbid.game.types.Vector2Int;
 
+import java.util.Vector;
+
 public class VectorMath {
     public static class NearChunksResult {
         public int startX;
@@ -58,6 +60,8 @@ public class VectorMath {
 
         x = (int) MathUtils.clamp(x, 0, Settings.CHUNKS_IN_WORLD.x - 1);
         y = (int) MathUtils.clamp(y, 0, Settings.CHUNKS_IN_WORLD.y - 1);
+
+
 
         return new Vector2Int(x, y);
     }

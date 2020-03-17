@@ -16,11 +16,6 @@ public class Vector2Int {
         this.y = y;
     }
 
-    public Vector2Int(Vector2Int xy) {
-        this.x = xy.x;
-        this.y = xy.y;
-    }
-
     /**
      * Converts Vector2Int to Vector2
      * @param v

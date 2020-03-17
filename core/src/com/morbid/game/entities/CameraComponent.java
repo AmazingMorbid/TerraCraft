@@ -2,7 +2,11 @@ package com.morbid.game.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.morbid.game.Settings;
+
+import java.util.Set;
 
 public class CameraComponent extends OrthographicCamera {
     private GameObject anchor;
@@ -17,29 +21,19 @@ public class CameraComponent extends OrthographicCamera {
         );
     }
 
-    public CameraComponent(float viewportWidth, float viewportHeight) {
-        super(viewportWidth, viewportHeight);
-    }
-
     @Override
     public void update() {
         super.update();
 
         if (attachedPlayer != null) {
-            position.set(
-                    attachedPlayer.body.getPosition().x * Settings.PPM,
-                    attachedPlayer.body.getPosition().y * Settings.PPM,
-                    0
-            );
+//            position.set(
+//                    attachedPlayer.body.getPosition().x * Settings.PPM,
+//                    attachedPlayer.body.getPosition().y * Settings.PPM,
+//                    0
+//            );
+            Vector2 attachedPosition = attachedPlayer.body.getPosition();
+            position.lerp(new Vector3(attachedPosition.x * Settings.PPM, attachedPosition.y * Settings.PPM, 0) , Settings.CAMERA_SMOOTH_TIME);
         }
-    }
-
-    /**
-     * Set camera anchor - camera will follow this GameObject
-     * @param anchor where to attach camera
-     */
-    public void setAnchor(GameObject anchor) {
-        this.anchor = anchor;
     }
 
     /**

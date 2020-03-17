@@ -36,10 +36,6 @@ public class Chunk {
         blockMap.remove(cellPosition);
     }
 
-    public Vector2 getWorldPosition() {
-        return worldPosition;
-    }
-
     public Map<Vector2Int, Block> getBlockMap() {
         return blockMap;
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -23,6 +24,7 @@ import com.morbid.game.gameworld.WorldMap;
 import com.morbid.game.gameworld.WorldGenerator;
 import com.morbid.game.types.Vector2Int;
 import com.morbid.game.types.WorldType;
+import com.morbid.game.utils.DebugTools;
 import com.morbid.game.utils.VectorMath;
 
 
@@ -54,21 +56,22 @@ public class MainGame extends ApplicationAdapter {
 
 		// World
 		worldGenerator = new WorldGenerator();
-		world = new World(new Vector2(0, -10), true);
 
-		// Player
-		player = new Player(world, new Vector2(0, 15));
+		World.setVelocityThreshold(0.0f);
+		world = new World(new Vector2(0, -17), true);
 
 		// Camera
 		camera = new CameraComponent();
 		viewport = new ExtendViewport(Settings.MIN_VIEWPORT_WIDTH, Settings.MIN_VIEWPORT_HEIGHT, camera);
 
-		camera.attachPlayer(player);
 		camera.update();
 		viewport.apply();
 
 		debugRenderer = new Box2DDebugRenderer();
 
+		// Player
+		player = new Player(world, new Vector2(0, 15));
+		camera.attachPlayer(player);
 
 		// World map
 		worldMap = worldGenerator.generateWorld(world, WorldType.FLAT);
@@ -76,6 +79,8 @@ public class MainGame extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
+
+
 				return false;
 			}
 
@@ -120,6 +125,7 @@ public class MainGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+
 		camera.update();
 		cameraBox2D = new Matrix4(camera.combined);
 		cameraBox2D.scl(Settings.PPM);
@@ -139,7 +145,36 @@ public class MainGame extends ApplicationAdapter {
 		renderMap();
 
 		// Debug render
-//		debugRenderer.render(world, cameraBox2D);
+		debugRenderer.render(world, cameraBox2D);
+
+//		DebugTools.line(
+//				new Vector2(
+//						camera.position.x - viewport.getWorldWidth() / 2,
+//						camera.position.y - viewport.getWorldHeight() / 2
+//				),
+//				new Vector2(
+//						camera.position.x + viewport.getWorldWidth() / 2,
+//						camera.position.y + viewport.getWorldHeight() / 2
+//				),
+//				2,
+//				Color.PINK,
+//				camera.combined
+//		);
+//
+//		DebugTools.line(
+//				new Vector2(
+//						camera.position.x - viewport.getWorldWidth() / 2,
+//						camera.position.y + viewport.getWorldHeight() / 2
+//				),
+//				new Vector2(
+//						camera.position.x + viewport.getWorldWidth() / 2,
+//						camera.position.y - viewport.getWorldHeight() / 2
+//				),
+//				2,
+//				Color.PINK,
+//				camera.combined
+//		);
+
 
 		batch.end();
 
@@ -147,7 +182,7 @@ public class MainGame extends ApplicationAdapter {
 		handleInput();
 
 		// Physics
-		updatePhysics();
+		updatePhysics(Gdx.graphics.getDeltaTime());
 	}
 
 	@Override
@@ -156,10 +191,11 @@ public class MainGame extends ApplicationAdapter {
 		viewport.update(width, height);
 	}
 
-	private void updatePhysics() {
+	private void updatePhysics(float deltaTime) {
 		world.step(1/60f, 6, 2);
+		player.update(deltaTime);
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
@@ -169,19 +205,7 @@ public class MainGame extends ApplicationAdapter {
 	}
 
 	private void handleInput() {
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			player.translate(new Vector2(-10, 0));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			player.translate(new Vector2(10, 0));
-
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			player.position.add(0, 10);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			player.position.add(0, -10);
-		}
+		player.handleInput();
 	}
 
 	private void onMouseClick(int button) {
