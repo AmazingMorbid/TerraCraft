@@ -36,7 +36,7 @@ public class WorldMap {
     }
 
     public void destroyBlock(Vector2Int blockCellPosition) {
-        this.worldBlocks[blockCellPosition.x][blockCellPosition.y] = BlockType.AIR;
+        this.worldBlocks[blockCellPosition.x][blockCellPosition.y] = BlockType.air;
     }
 
     public Chunk[][] getChunks() {

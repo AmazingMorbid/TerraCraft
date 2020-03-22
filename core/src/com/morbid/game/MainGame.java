@@ -70,11 +70,11 @@ public class MainGame extends ApplicationAdapter {
 		debugRenderer = new Box2DDebugRenderer();
 
 		// Player
-		player = new Player(world, new Vector2(0, 70));
+		player = new Player(world, new Vector2(0, 64));
 		camera.attachPlayer(player);
 
 		// World map
-		worldMap = worldGenerator.generateWorld(world, WorldType.SINUS);
+		worldMap = worldGenerator.generateWorld(world, WorldType.DEFAULT);
 
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override

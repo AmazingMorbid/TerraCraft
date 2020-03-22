@@ -11,12 +11,20 @@ public class Settings {
     /**
      * World size in blocks
      */
-    public static final Vector2Int WORLD_SIZE = new Vector2Int(64, 64);
+    public static final Vector2Int WORLD_SIZE = new Vector2Int(512, 256);
 
     /**
      * Chunk size in blocks
      */
     public static final Vector2Int CHUNK_SIZE = new Vector2Int(16, 16);
+
+    public static final double WORLD_GENERATOR_FEATURE_SIZE = 10;
+
+    public static final double COAL_ORE_FEATURE_SIZE = 6;
+    public static final double IRON_ORE_FEATURE_SIZE = 5;
+    public static final double GOLD_ORE_FEATURE_SIZE = 3;
+    public static final double DIAMOND_ORE_FEATURE_SIZE = 2;
+
 
     /**
      * Number of chunks in world by dimension
@@ -36,8 +44,8 @@ public class Settings {
     public static final Vector2 CHUNK_SIZE_PIXELS = new Vector2(BLOCK_SIZE * CHUNK_SIZE.x, BLOCK_SIZE * CHUNK_SIZE.y);
 
     // ---------- Camera Settings ---------- //
-    public static final int MIN_VIEWPORT_WIDTH = 800;
-    public static final int MIN_VIEWPORT_HEIGHT = 800;
+    public static final int MIN_VIEWPORT_WIDTH = 2500;
+    public static final int MIN_VIEWPORT_HEIGHT = 2500;
     public static final float CAMERA_SMOOTH_TIME = 0.3f;
 
     /* ---------- Gameplay settings ---------- */
@@ -50,6 +58,11 @@ public class Settings {
      * Maximum velocity of player.
      */
     public static final float PLAYER_MAXIMUM_VELOCITY = 3.5f;
+
+    /**
+     * Maximum velocity of player in flight.
+     */
+    public static final float PLAYER_MAXIMUM_FLYING_VELOCITY = 9.0f;
 
     /**
      * Movement acceleration of player.

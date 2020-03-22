@@ -36,7 +36,7 @@ public class Block extends Rigidbody {
 
     @Override
     public void render(Batch batch) {
-        sprite.draw(batch);
+            sprite.draw(batch);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Block extends Rigidbody {
      * Creates sprite
      */
     private void createSprite() {
-        sprite = new Sprite(AssetLoader.getTexture(blockType.toString()));
+        sprite = new Sprite(AssetLoader.getTexture(blockType.name() + ".png"));
         sprite.setPosition(
                 position.x * Settings.BLOCK_SIZE,
                 position.y * Settings.BLOCK_SIZE

@@ -145,14 +145,16 @@ public class Player extends Rigidbody {
      * @param xDirection of movement. 1 for left, -1 for right.
      */
     private void move(int xDirection) {
+        float maxVelocity =  canFly ? Settings.PLAYER_MAXIMUM_FLYING_VELOCITY : Settings.PLAYER_MAXIMUM_VELOCITY;
+
         if (xDirection == 0) {
             // Stop player when no key is being pressed.
             body.setLinearVelocity(new Vector2(0, body.getLinearVelocity().y));
 
         }
-        else if (!checkIsTouchingWall(xDirection)) {
+        else if (!checkIsTouchingWall(xDirection) && gameMode != GameMode.SPECTATOR) {
             // Allow walking only when body is not touching walls (to prevent sticking to them)
-            body.setLinearVelocity(new Vector2(Settings.PLAYER_MAXIMUM_VELOCITY * xDirection, body.getLinearVelocity().y));
+            body.setLinearVelocity(new Vector2(maxVelocity * xDirection, body.getLinearVelocity().y));
         }
     }
 
@@ -187,7 +189,7 @@ public class Player extends Rigidbody {
      */
     private void fly(int yDirection) {
         if (canFly) {
-            body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, Settings.PLAYER_MAXIMUM_VELOCITY * yDirection));
+            body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, Settings.PLAYER_MAXIMUM_FLYING_VELOCITY * yDirection));
         }
     }
 
