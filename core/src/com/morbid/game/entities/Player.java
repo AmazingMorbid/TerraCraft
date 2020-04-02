@@ -163,28 +163,10 @@ public class Player extends Rigidbody {
      */
     private void jump() {
         /*
-         * Apply impulse to the player
-         * I'm calculating impulse needed to jump on a certain height.
-         * This way player can easily set jump height in blocks (meters).
-         * h - height of jump [m]
-         * t = sqrt( -(2h) / g )
-         * u = sqrt(-2gh)
-         * a = (v - u) / t
-         * F = m * a
-         * Impulse = F * t
-         * Impulse = m * sqrt( -2 * g * h )
-         */
-        /*
         2as = Vf^2 - Vi^2
         Vi = sqrt(2as)
          */
         if (checkIsOnGround()) {
-//            body.applyLinearImpulse(
-//                    new Vector2(0, (float) (body.getMass() * Math.sqrt(-2 * world.getGravity().y * Settings.PLAYER_JUMP_HEIGHT))),
-//                    Vector2.Y,
-//                    true
-//            );
-
             body.setLinearVelocity(
                     body.getLinearVelocity().x,
                     (float) Math.sqrt(2 * -world.getGravity().y * Settings.PLAYER_JUMP_HEIGHT)
