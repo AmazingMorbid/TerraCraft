@@ -35,16 +35,17 @@ public class VectorMath {
         float cameraHeightHalf = camera.viewportHeight / 2 / Settings.PPM;
 
         // Calculate index values
-        int startX = (int) ((playerPosition.x - cameraWidthHalf) / Settings.CHUNK_SIZE.x) - 1;
-        int endX = (int) ((playerPosition.x + cameraWidthHalf) / Settings.CHUNK_SIZE.x) + 1;
-        int startY = (int) ((playerPosition.y - cameraHeightHalf) / Settings.CHUNK_SIZE.y) - 1;
-        int endY = (int) ((playerPosition.y + cameraHeightHalf) / Settings.CHUNK_SIZE.y) + 1;
+        int startX = (int) ((playerPosition.x - cameraWidthHalf) / Settings.CHUNK_SIZE.x);
+        int endX = (int) ((playerPosition.x + cameraWidthHalf) / Settings.CHUNK_SIZE.x);
+        int startY = (int) ((playerPosition.y - cameraHeightHalf) / Settings.CHUNK_SIZE.y);
+        int endY = (int) ((playerPosition.y + cameraHeightHalf) / Settings.CHUNK_SIZE.y);
 
         // Clamp chunks to prevent an index out of bounds
         startX  = (int) MathUtils.clamp(startX, 0, Settings.CHUNKS_IN_WORLD.x - 1);
         endX  = (int) MathUtils.clamp(endX, 0, Settings.CHUNKS_IN_WORLD.x - 1);
         startY  = (int) MathUtils.clamp(startY, 0, Settings.CHUNKS_IN_WORLD.y - 1);
         endY  = (int) MathUtils.clamp(endY, 0, Settings.CHUNKS_IN_WORLD.y - 1);
+
 
         return new NearChunksResult(
                 startX,

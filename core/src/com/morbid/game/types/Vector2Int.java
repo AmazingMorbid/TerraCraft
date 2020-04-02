@@ -25,6 +25,10 @@ public class Vector2Int {
         return new Vector2(v.x, v.y);
     }
 
+    public static Vector2Int toVector2Int(Vector2 v) {
+        return new Vector2Int((int) v.x, (int) v.y);
+    }
+
     public Vector2 toVector2() {
         return new Vector2(x, y);
     }

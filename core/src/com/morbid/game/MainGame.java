@@ -1,9 +1,6 @@
 package com.morbid.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,6 +25,11 @@ import com.morbid.game.types.WorldType;
 import com.morbid.game.utils.DebugTools;
 import com.morbid.game.utils.VectorMath;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class MainGame extends ApplicationAdapter {
 	// Camera
@@ -34,13 +37,9 @@ public class MainGame extends ApplicationAdapter {
 	Viewport viewport;
 	Matrix4 cameraBox2D;
 
-	// Player
-	Player player;
-
 	// World
 	WorldGenerator worldGenerator;
 	WorldMap worldMap;
-	World world;
 
 	Box2DDebugRenderer debugRenderer;
 
@@ -58,7 +57,7 @@ public class MainGame extends ApplicationAdapter {
 		worldGenerator = new WorldGenerator();
 
 		World.setVelocityThreshold(0.0f);
-		world = new World(new Vector2(0, -17), true);
+		GameManager.setWorld(new World(new Vector2(0, -17), true));
 
 		// Camera
 		camera = new CameraComponent();
@@ -70,11 +69,11 @@ public class MainGame extends ApplicationAdapter {
 		debugRenderer = new Box2DDebugRenderer();
 
 		// Player
-		player = new Player(world, new Vector2(0, 64));
-		camera.attachPlayer(player);
+		GameManager.setPlayer(new Player(GameManager.getWorld(), new Vector2((float) Settings.WORLD_SIZE.x / 2, Settings.WORLD_SIZE.y)));
+		camera.attachPlayer(GameManager.getPlayer());
 
 		// World map
-		worldMap = worldGenerator.generateWorld(world, WorldType.DEFAULT);
+		worldMap = worldGenerator.generateWorld(GameManager.getWorld(), WorldType.DEFAULT);
 
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
@@ -139,13 +138,15 @@ public class MainGame extends ApplicationAdapter {
 		batch.begin();
 
 		// Player
-		player.render(batch);
+		GameManager.getPlayer().render(batch);
 
 		// World
+		loadChunks();
 		renderMap();
+		updateChunks(Gdx.graphics.getDeltaTime());
 
 		// Debug render
-//		debugRenderer.render(world, cameraBox2D);
+//		debugRenderer.render(GameManager.getWorld(), cameraBox2D);
 
 		batch.end();
 
@@ -163,20 +164,24 @@ public class MainGame extends ApplicationAdapter {
 	}
 
 	private void updatePhysics(float deltaTime) {
-		world.step(1/60f, 6, 2);
-		player.update(deltaTime);
+		GameManager.getWorld().step(1/60f, 6, 2);
+		GameManager.getPlayer().update(deltaTime);
 	}
 
 	@Override
 	public void dispose () {
 		batch.dispose();
 		debugRenderer.dispose();
-		world.dispose();
+		GameManager.getWorld().dispose();
 		AssetLoader.disposeTextures();
 	}
 
 	private void handleInput() {
-		player.handleInput();
+		GameManager.getPlayer().handleInput();
+
+		if (Gdx.input.isButtonJustPressed(Input.Keys.L)) {
+			loadChunks();
+		}
 	}
 
 	private void onMouseClick(int button) {
@@ -193,16 +198,73 @@ public class MainGame extends ApplicationAdapter {
 			Vector2Int chunkPosition = VectorMath.getChunkAt(mouseCellPosition.toVector2());
 
 			Chunk chunk = worldMap.getChunks()[chunkPosition.x][chunkPosition.y];
-			Block block = chunk.getBlockMap().get(mouseCellPosition);
 
-			if (block != null) {
-				world.destroyBody(block.body);
-				worldMap.destroyBlock(mouseCellPosition);
-				chunk.destroyBlock(mouseCellPosition);
+			if (chunk != null && chunk.getBlockMap() != null) {
+
+
+				Block block = chunk.getBlockMap().get(mouseCellPosition);
+
+				if (block != null) {
+					GameManager.getWorld().destroyBody(block.body);
+					worldMap.destroyBlock(mouseCellPosition);
+					chunk.destroyBlock(mouseCellPosition);
+				}
+
+				System.out.println(mouseCellPosition.toString());
+				System.out.println(chunkPosition.toString());
 			}
+		}
+	}
 
-			System.out.println(mouseCellPosition.toString());
-			System.out.println(chunkPosition.toString());
+	/**
+	 * Load chunks.
+	 */
+	private void loadChunks() {
+		// Get chunks in player's range.
+		VectorMath.NearChunksResult visibleChunksIndexes = VectorMath.getChunksNearPlayer(
+				camera,
+				GameManager.getPlayer().body.getPosition()
+		);
+
+		// Unload unused chunks.
+		compareAndUnloadChunks(visibleChunksIndexes, GameManager.getVisibleChunks());
+
+		worldMap.loadChunks(
+				visibleChunksIndexes.startX,
+				visibleChunksIndexes.endX
+		);
+
+		// Store currently loaded chunks, so they can be compared in next call.
+		GameManager.setVisibleChunks(visibleChunksIndexes);
+	}
+
+	/**
+	 * Update chunks (and blocks inside them)
+	 * @param deltaTime
+	 */
+	private void updateChunks(float deltaTime) {
+		for (Chunk[] chunks : worldMap.getChunks()) {
+			for (Chunk chunk : chunks) {
+				chunk.update(deltaTime);
+			}
+		}
+	}
+
+	/**
+	 * Compares chunks in player's range with previous ones and unloads unused ones.
+	 * @param chunksNow chunks currently in range
+	 * @param chunksLast previous chunks
+	 */
+	private void compareAndUnloadChunks(VectorMath.NearChunksResult chunksNow, VectorMath.NearChunksResult chunksLast) {
+		// First run will result in last chunks being null, so return
+		if (chunksLast == null) {
+			return;
+		}
+
+		if (chunksNow.startX > chunksLast.startX) {
+			worldMap.unloadChunks(chunksLast.startX);
+		} else if (chunksNow.endX < chunksLast.endX) {
+			worldMap.unloadChunks(chunksLast.endX);
 		}
 	}
 
@@ -212,7 +274,7 @@ public class MainGame extends ApplicationAdapter {
 	 */
 	private void renderMap() {
 		// Get chunks near player
-		VectorMath.NearChunksResult visibleChunksIndexes = VectorMath.getChunksNearPlayer(camera, player.body.getPosition());
+		VectorMath.NearChunksResult visibleChunksIndexes = VectorMath.getChunksNearPlayer(camera, GameManager.getPlayer().body.getPosition());
 
 		// Render chunks
 		worldMap.renderChunks(

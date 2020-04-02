@@ -84,4 +84,8 @@ public class Block extends Rigidbody {
     public BlockType getBlockType() {
         return blockType;
     }
+
+    public void destroy() {
+        world.destroyBody(body);
+    }
 }

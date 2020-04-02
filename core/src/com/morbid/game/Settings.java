@@ -11,7 +11,8 @@ public class Settings {
     /**
      * World size in blocks
      */
-    public static final Vector2Int WORLD_SIZE = new Vector2Int(512, 256);
+//    public static final Vector2Int WORLD_SIZE = new Vector2Int(4096, 512);
+    public static final Vector2Int WORLD_SIZE = new Vector2Int(16384, 1024);
 
     /**
      * Chunk size in blocks
@@ -43,6 +44,13 @@ public class Settings {
 
     public static final Vector2 CHUNK_SIZE_PIXELS = new Vector2(BLOCK_SIZE * CHUNK_SIZE.x, BLOCK_SIZE * CHUNK_SIZE.y);
 
+    /**
+     * Maximum distance between player and a chunk before it gets unloaded.
+     * WARNING: DO NOT SET THIS VALUE TOO HIGH OR IT WILL CAUSE TOO MANY CHUNKS BEING LOADED AT ONCE. ALSO,
+     * DO NOT SET THIS VALUE TOO LOW AS IT WILL CAUSE PLAYER TO FALL INTO THE VOID.
+     */
+    public static final float CHUNK_UNLOAD_DISTANCE = 40;
+
     // ---------- Camera Settings ---------- //
     public static final int MIN_VIEWPORT_WIDTH = 2500;
     public static final int MIN_VIEWPORT_HEIGHT = 2500;
@@ -62,7 +70,7 @@ public class Settings {
     /**
      * Maximum velocity of player in flight.
      */
-    public static final float PLAYER_MAXIMUM_FLYING_VELOCITY = 9.0f;
+    public static final float PLAYER_MAXIMUM_FLYING_VELOCITY = 20.0f;
 
     /**
      * Movement acceleration of player.
