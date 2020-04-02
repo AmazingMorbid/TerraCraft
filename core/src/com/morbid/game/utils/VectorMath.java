@@ -1,8 +1,14 @@
 package com.morbid.game.utils;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.morbid.game.Settings;
 import com.morbid.game.entities.CameraComponent;
+import com.morbid.game.gameworld.Chunk;
+import com.morbid.game.types.Vector2Int;
+
+import java.util.Vector;
 
 public class VectorMath {
     public static class NearChunksResult {
@@ -25,28 +31,21 @@ public class VectorMath {
      * @return chunk indexes
      */
     public static NearChunksResult getChunksNearPlayer(CameraComponent camera, Vector2 playerPosition) {
-        float cameraWidthHalf = camera.viewportWidth / 2;
-        float cameraHeightHalf = camera.viewportHeight / 2;
+        float cameraWidthHalf = camera.viewportWidth / 2 / Settings.PPM;
+        float cameraHeightHalf = camera.viewportHeight / 2 / Settings.PPM;
 
         // Calculate index values
-        int startX = (int) ((playerPosition.x * Settings.PPM - cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) - 1;
-        int endX = (int) ((playerPosition.x * Settings.PPM + cameraWidthHalf) / Settings.CHUNK_SIZE_PIXELS.x) + 1;
-
-        int startY = (int) ((playerPosition.y * Settings.PPM - cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) - 1;
-        int endY = (int) ((playerPosition.y * Settings.PPM + cameraHeightHalf) / Settings.CHUNK_SIZE_PIXELS.y) + 1;
-
-        int worldChunksX = Settings.WORLD_SIZE.x / Settings.CHUNK_SIZE.x - 1;
-        int worldChunksY = Settings.WORLD_SIZE.y / Settings.CHUNK_SIZE.y - 1;
+        int startX = (int) ((playerPosition.x - cameraWidthHalf) / Settings.CHUNK_SIZE.x);
+        int endX = (int) ((playerPosition.x + cameraWidthHalf) / Settings.CHUNK_SIZE.x);
+        int startY = (int) ((playerPosition.y - cameraHeightHalf) / Settings.CHUNK_SIZE.y);
+        int endY = (int) ((playerPosition.y + cameraHeightHalf) / Settings.CHUNK_SIZE.y);
 
         // Clamp chunks to prevent an index out of bounds
-        startX = Math.max(startX, 0);
-        startX = Math.min(startX, worldChunksX);
-        endX = Math.max(endX, 0);
-        endX = Math.min(endX, worldChunksX);
-        startY = Math.max(startY, 0);
-        startY = Math.min(startY, worldChunksY);
-        endY = Math.max(endY, 0);
-        endY = Math.min(endY, worldChunksY);
+        startX  = (int) MathUtils.clamp(startX, 0, Settings.CHUNKS_IN_WORLD.x - 1);
+        endX  = (int) MathUtils.clamp(endX, 0, Settings.CHUNKS_IN_WORLD.x - 1);
+        startY  = (int) MathUtils.clamp(startY, 0, Settings.CHUNKS_IN_WORLD.y - 1);
+        endY  = (int) MathUtils.clamp(endY, 0, Settings.CHUNKS_IN_WORLD.y - 1);
+
 
         return new NearChunksResult(
                 startX,
@@ -54,5 +53,17 @@ public class VectorMath {
                 startY,
                 endY
         );
+    }
+
+    public static Vector2Int getChunkAt(Vector2 worldPosition) {
+        int x = (int) (worldPosition.x / Settings.CHUNK_SIZE.x);
+        int y = (int) (worldPosition.y / Settings.CHUNK_SIZE.y);
+
+        x = (int) MathUtils.clamp(x, 0, Settings.CHUNKS_IN_WORLD.x - 1);
+        y = (int) MathUtils.clamp(y, 0, Settings.CHUNKS_IN_WORLD.y - 1);
+
+
+
+        return new Vector2Int(x, y);
     }
 }

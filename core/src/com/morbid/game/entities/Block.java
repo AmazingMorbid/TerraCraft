@@ -5,14 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.morbid.game.AssetLoader;
 import com.morbid.game.Settings;
 import com.morbid.game.types.BlockType;
 import com.morbid.game.types.Vector2Int;
+import org.w3c.dom.UserDataHandler;
 
 /**
  * Blocks are the basic units of structure in game that can be placed or destroyed.
@@ -38,7 +36,7 @@ public class Block extends Rigidbody {
 
     @Override
     public void render(Batch batch) {
-        sprite.draw(batch);
+            sprite.draw(batch);
     }
 
     @Override
@@ -58,7 +56,12 @@ public class Block extends Rigidbody {
                 sprite.getHeight() / 2 / Settings.PPM
         );
 
-        body.createFixture(blockBox, 0.0f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = blockBox;
+        fixtureDef.density = 0.0f;
+        fixtureDef.friction = 1f;
+
+        body.createFixture(fixtureDef);
 
         blockBox.dispose();
     }
@@ -67,7 +70,7 @@ public class Block extends Rigidbody {
      * Creates sprite
      */
     private void createSprite() {
-        sprite = new Sprite(AssetLoader.getTexture(blockType.toString()));
+        sprite = new Sprite(AssetLoader.getTexture(blockType.name() + ".png"));
         sprite.setPosition(
                 position.x * Settings.BLOCK_SIZE,
                 position.y * Settings.BLOCK_SIZE
@@ -82,8 +85,7 @@ public class Block extends Rigidbody {
         return blockType;
     }
 
-    public void setBlockType(BlockType blockType) {
-        this.blockType = blockType;
+    public void destroy() {
+        world.destroyBody(body);
     }
-
 }

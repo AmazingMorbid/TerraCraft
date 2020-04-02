@@ -2,8 +2,13 @@ package com.morbid.game.gameworld;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
+import com.morbid.game.Settings;
 import com.morbid.game.types.BlockType;
+import com.morbid.game.types.Vector2Int;
 import com.morbid.game.types.WorldType;
+import com.morbid.game.utils.VectorMath;
+
+import java.util.List;
 
 public class WorldMap {
     private WorldType worldType;
@@ -29,9 +34,46 @@ public class WorldMap {
             for (int y = yChunksStart; y <= yChunksEnd; y++) {
                 Chunk chunk = chunks[x][y];
 
-                chunk.renderBlocks(batch);
+                if (chunk != null && chunk.getBlockMap() != null) {
+                    chunk.renderBlocks(batch);
+                }
             }
         }
+    }
+
+    /**
+     * Load specified chunks.
+     * @param xChunksStart
+     * @param xChunksEnd
+     */
+    public void loadChunks(int xChunksStart, int xChunksEnd) {
+        for (int x = xChunksStart; x <= xChunksEnd; x++) {
+            for (int y = 0; y < Settings.CHUNKS_IN_WORLD.y; y++) {
+                Chunk chunk = chunks[x][y];
+
+                if (chunk != null) {
+                    chunk.load();
+                }
+            }
+        }
+    }
+
+    /**
+     * Unloads all chunks at x from 0 to max height.
+     * @param chunkXIndexToUnload x index where chunks will be unloaded.
+     */
+    public void unloadChunks(int chunkXIndexToUnload) {
+        for (int y = 0; y < Settings.CHUNKS_IN_WORLD.y; y++) {
+            Chunk chunk = chunks[chunkXIndexToUnload][y];
+
+            if (chunk != null) {
+                chunk.unload();
+            }
+        }
+    }
+
+    public void destroyBlock(Vector2Int blockCellPosition) {
+        this.worldBlocks[blockCellPosition.x][blockCellPosition.y] = BlockType.air;
     }
 
     public Chunk[][] getChunks() {
